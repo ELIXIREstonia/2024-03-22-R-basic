@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Introduction to Rstudio UI
 
-You can find this and the data files from ELIXIREstonia github. [`https://github.com/ELIXIREstonia/2023-10-24-R-basic`](https://github.com/ELIXIREstonia/2023-10-24-R-basic).
+You can find this and the data files from ELIXIREstonia github. [`https://github.com/adlerpriit/2024-03-22-R-basic`](https://github.com/adlerpriit/2024-03-22-R-basic).
 
 RStudio is an integrated development environment (IDE) tailored for efficient and user-friendly R programming. Once launched, the RStudio UI presents itself in a segmented manner, primarily divided into four main panes.
 
@@ -29,7 +29,7 @@ see: [`https://rstudio.github.io/cheatsheets/html/rstudio-ide.html`](https://rst
 
 R is a popular open-source programming language and environment for statistical computing and graphics. In this section, we will cover basic R syntax, functions, data structures, and data manipulation using the tidyverse.
 
-You can find this and the data files from ELIXIREstonia github. `https://github.com/ELIXIREstonia/2023-10-24-R-basic`.
+You can find this and the data files from ELIXIREstonia github. `https://github.com/adlerpriit/2024-03-22-R-basic`.
 
 ### R Syntax and Basic Functions
 
@@ -61,7 +61,7 @@ my_sum(5, 7)
 
 ### Task: **Budgeting for a Party**
 
-You're planning a party and need to budget for it. Here's the cost breakdown:
+You're planning a party and need to budget for it. Here's the cost breakdown *(assign value)*:
 
 1.  Venue rental: \$100
 
@@ -71,7 +71,7 @@ You're planning a party and need to budget for it. Here's the cost breakdown:
 
 4.  Entertainment: \$50
 
-Use the arithmetic operations you've learned to answer the following:
+Use the arithmetic operations you've learned to answer the following *(arithmetic operations with variables)*:
 
 1.  If you're inviting 10 people, how much will the food cost?
 
@@ -79,7 +79,7 @@ Use the arithmetic operations you've learned to answer the following:
 
 3.  What's the total cost for a party with 10 attendees?
 
-Now, create variables for each of the costs:
+Now, create variables for each of the costs *(assign the formula, i.e.* `y <- a + b`*)*:
 
 -   **`venue_cost`** for the venue rental
 
@@ -157,7 +157,7 @@ You have been given data about students from three different classes: Biology, C
 
     Scores: 85, 78, 90
 
-2.  **Matrices**: Assume that the ages and scores of students from all three classes (Biology, Chemistry, Physics) are as follows:
+2.  **Matrices**: Assume that the ages and scores of students from all three classes (Biology, Chemistry, Physics) are as follows *(check help on* `matrix`*)*:
 
     Ages: 20, 21, 19, 22, 20, 23, 24, 22, 25
 
@@ -177,7 +177,7 @@ You have been given data about students from three different classes: Biology, C
 
     -   Using the data frame, filter out all students who scored above 85 and print their names and classes.
 
-    -   Using the matrix, calculate the average age and score of students from each class.
+    -   Using the matrix, calculate the average score of students from each class.
 
 ```{r}
 
@@ -270,7 +270,8 @@ In the following example, we'll use pipes to perform a series of operations on o
 set.seed(42)
 data <- tibble(
   YourCategory = factor(sample(LETTERS[1:5], 100, replace = TRUE)),
-  YourVariable = rnorm(100, mean = 50, sd = 10)
+  YourVariable = rnorm(100, mean = 50, sd = 10),
+  YourOtherVariable = rnorm(100, mean = 20, sd = 2)
 )
 head(data)
 ```
@@ -290,6 +291,27 @@ head(data_summary)
 
 In the above code, replace `YourCategory` and `YourVariable` with the appropriate column names from your dataset. This will give a high-level overview of the data, summarizing it by the specified category and calculating the mean of the specified variable. The use of pipes makes it easy to understand the sequence of transformations applied to the data.
 
+```{r}
+# New column using mutate and case_when statement
+# note that we are overwriting (updating) the original data
+data <- data %>%
+  mutate(
+    HalfOfOtherVariabel = YourOtherVariable / 2, # we can add another column based on existing columns
+    YourGroup = case_when(
+      YourCategory %in% c("A", "B") ~ "Group 1", # combine A and B into Group 1
+      YourCategory %in% c("C", "D") ~ "Group 2", # combine C and D into Group 2
+      TRUE ~ "Other"                             # case_when needs fallback default value, 
+                                                 # if none of the above match
+    ),
+    NewVariable = case_when(
+      YourVariable > 60 ~ YourVariable * 2,  # Double values above 60
+      YourVariable < 40 ~ YourVariable / 2,  # Halve values below 40
+      TRUE ~ YourVariable                    # Keep as is otherwise
+    )
+  )
+head(data)
+```
+
 ### Task:
 
 **Task: Analyzing Effects of Drugs on Memory**
@@ -308,19 +330,19 @@ Using the "Memory Test on Drugged Islanders Data" dataset, your task is to analy
 
     -   For each drug, calculate:
 
-        1.  The average **`diff`** in memory scores.
+        1.  The average **`Diff`** in memory scores.
 
         2.  The total number of participants that took that drug (**`n()`**).
 
-    -   Sort the results based on the average **`diff`** in descending order.
+    -   Sort the results based on the average **`Diff`** in descending order.
 
 3.  **Dosage Analysis**:
 
     -   Group the data by both **`Drug`** and **`dosage`**.
 
-    -   For each drug and dosage combination, calculate the average **`diff`** in memory scores.
+    -   For each drug and dosage combination, calculate the average **`Diff`** in memory scores.
 
-    -   Display the results, sorting first by **`Drug`** and then by the average **`diff`** in descending order.
+    -   Display the results, sorting first by **`Drug`** and then by the average **`Diff`** in descending order.
 
 4.  **Age Group Analysis**:
 
@@ -328,7 +350,7 @@ Using the "Memory Test on Drugged Islanders Data" dataset, your task is to analy
 
     -   Group the data by **`age_group`** and **`Drug`**.
 
-    -   Calculate the average **`diff`** in memory scores for each age group and drug combination.
+    -   Calculate the average **`Diff`** in memory scores for each age group and drug combination.
 
     -   Display the results, and try to infer if age has any impact on the drug's effectiveness.
 
@@ -336,7 +358,7 @@ Using the "Memory Test on Drugged Islanders Data" dataset, your task is to analy
 
     -   Group the data based on the **`happy/sad group`** column.
 
-    -   For each emotion group, calculate the average **`diff`** in memory scores before and after drug administration.
+    -   For each emotion group, calculate the average **`Diff`** in memory scores before and after drug administration.
 
     -   Compare the results. Does the primed emotion seem to have an effect on the memory scores?
 
